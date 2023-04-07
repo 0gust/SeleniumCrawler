@@ -3,11 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.relative_locator import locate_with
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.service import Service
 from csv import writer
 
 url = "https://ww3.readopm.com/"
-driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+service = FirefoxService(executable_path=GeckoDriverManager().install())
+driver = webdriver.Firefox(service=service)
 driver.get(url)
 
 chapter_locator = driver.find_elements(By.CSS_SELECTOR, ".no-border-x > tr > td:nth-child(1)")
@@ -22,3 +22,6 @@ with open ('opm.csv', 'w', encoding='utf8', newline='') as f:
   for row in range(len(chapter_locator)):
     info = [chapter_locator[row].text, date_locator[row].text, link_locator[row].get_attribute("href")]
     thewriter.writerow(info)
+
+driver.close()
+driver.quit()
